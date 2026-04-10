@@ -1,0 +1,33 @@
+* { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+}
+body {
+    font-family: Arial, sans-serif;
+    background: #f0f0f0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+main {
+    background: #e53935;
+    width: 420px;
+    padding: 12px;
+    border-radius: 10px;
+}
+header, section, aside {
+    margin-bottom: 10px;
+    }
+.painel {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 8px;
+}
+.caixa {
+    background: #111;
+    color: #fff;
+    border-radius: 6px;
+    padding: 8px;
+}
