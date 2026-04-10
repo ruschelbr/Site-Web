@@ -10,76 +10,136 @@ let bebidas = [];
 let bebidaSelecionada = null;
 let valorInserido = 0;
 
-function formatar(valor) { 
-  return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); 
+function formatar(valor) {
+  return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 
-function atualizarVisor() { 
-  visorValorEl.textContent = formatar(valorInserido); 
+function atualizarVisor() {
+  visorValorEl.textContent = formatar(valorInserido);
 }
 
-function mostrarMensagem(texto) { 
-  mensagemEl.textContent = texto; 
+function mostrarMensagem(texto) {
+  mensagemEl.textContent = texto;
 }
 
-function limparSelecao() { 
-  document.querySelectorAll('.bebida').forEach(b => b.classList.remove('selecionada')); 
+function limparSelecao() {
+  document.querySelectorAll('.bebida.selecionada').forEach(btn => btn.classList.remove('selecionada'));
 }
 
 function selecionarBebida(indice) {
   bebidaSelecionada = bebidas[indice];
   limparSelecao();
-  document.querySelector('.bebida[data-indice="' + indice + '"]').classList.add('selecionada');
+  const btn = document.querySelector('.bebida[data-indice="' + indice + '"]');
+  if (btn) btn.classList.add('selecionada');
   infoRefriEl.textContent = bebidaSelecionada.sabor + ' - ' + formatar(bebidaSelecionada.preco);
+  mostrarMensagem('Insira moedas até atingir o valor da bebida.');
   verificarCompra();
 }
 
-function liberarBebida(troco) {
-  const texto = troco > 0 
-    ? 'Bebida ' + bebidaSelecionada.sabor + ' liberada. Troco: ' + formatar(troco) + '.' 
-    : 'Bebida ' + bebidaSelecionada.sabor + ' liberada.';
+function liberarRefrigerante(troco) {
+  const texto = troco > 0
+    ? 'Bebida ' + bebidaSelecionada.sabor + ' liberado. Troco: ' + formatar(troco) + '.'
+    : 'Bebida ' + bebidaSelecionada.sabor + ' liberado.';
   
-  mostrarMensagem(texto);
-  saidaEl.innerHTML = '<img src="' + bebidaSelecionada.imagem + '" alt="' + bebidaSelecionada.sabor + '"><span>' + texto + '</span>';
+  mostrarMensagem("");
+  saidaEl.innerHTML = '';
+  
+  const img = document.createElement('img');
+  img.src = bebidaSelecionada.imagem;
+  img.alt = bebidaSelecionada.sabor;
+  img.loading = 'lazy';
+  
+  const span = document.createElement('span');
+  span.textContent = texto;
+  
+  saidaEl.appendChild(img);
+  saidaEl.appendChild(span);
   
   valorInserido = 0;
   atualizarVisor();
-  infoRefriEl.textContent = 'Nenhuma bebida selecionada';
+  infoRefriEl.textContent = 'Nenhum bebida selecionada';
   limparSelecao();
   bebidaSelecionada = null;
 }
 
 function verificarCompra() {
   if (!bebidaSelecionada) return;
-  
   if (valorInserido < bebidaSelecionada.preco) {
-    mostrarMensagem('Faltam ' + formatar(bebidaSelecionada.preco - valorInserido) + ' para comprar ' + bebidaSelecionada.sabor + '.');
+    const falta = bebidaSelecionada.preco - valorInserido;
+    mostrarMensagem('Faltam ' + formatar(falta) + ' para comprar ' + bebidaSelecionada.sabor + '.');
   } else {
-    liberarBebida(Number((valorInserido - bebidaSelecionada.preco).toFixed(2)));
+    const troco = Number((valorInserido - bebidaSelecionada.preco).toFixed(2));
+    liberarRefrigerante(troco);
   }
 }
 
 function adicionarMoeda(valorTexto) {
-  valorInserido = Number((valorInserido + Number(valorTexto)).toFixed(2));
+  const valor = Number(valorTexto);
+  if (Number.isNaN(valor)) return;
+  
+  valorInserido = Number((valorInserido + valor).toFixed(2));
   atualizarVisor();
+  
+  if (!bebidaSelecionada) {
+    mostrarMensagem('Selecione uma bebida.');
+    return;
+  }
   verificarCompra();
 }
 
 function configurarMoedas() {
-  document.querySelectorAll('.moeda').forEach(moeda => {
+  const moedas = document.querySelectorAll('.moeda');
+  moedas.forEach(moeda => {
     moeda.addEventListener('dragstart', e => {
       e.dataTransfer.setData('text/plain', moeda.dataset.valor);
       slotMoedasEl.classList.add('ativo');
     });
-    moeda.addEventListener('dragend', () => slotMoedasEl.classList.remove('ativo'));
+    moeda.addEventListener('dragend', () => {
+      slotMoedasEl.classList.remove('ativo');
+    });
   });
   
-  slotMoedasEl.addEventListener('dragover', e => e.preventDefault());
+  slotMoedasEl.addEventListener('dragover', e => {
+    e.preventDefault();
+  });
   
   slotMoedasEl.addEventListener('drop', e => {
     e.preventDefault();
-    adicionarMoeda(e.dataTransfer.getData('text/plain'));
+    const valor = e.dataTransfer.getData('text/plain');
     slotMoedasEl.classList.remove('ativo');
+    adicionarMoeda(valor);
+  });
+}
+
+function criarBotoesBebidas() {
+  listaBebidasEl.innerHTML = '';
+  bebidas.forEach((bebida, indice) => {
+    const botao = document.createElement('button');
+    botao.type = 'button';
+    botao.className = 'bebida';
+    botao.dataset.indice = indice;
+    
+    const img = document.createElement('img');
+    img.src = bebida.imagem;
+    img.alt = bebida.sabor;
+    img.loading = 'lazy';
+    
+    const caixa = document.createElement('div');
+    const nome = document.createElement('div');
+    nome.className = 'bebida-nome';
+    nome.textContent = bebida.sabor;
+    
+    const preco = document.createElement('div');
+    preco.className = 'bebida-preco';
+    preco.textContent = formatar(bebida.preco);
+    
+    caixa.appendChild(nome);
+    caixa.appendChild(preco);
+    botao.appendChild(img);
+    botao.appendChild(caixa);
+    
+    botao.addEventListener('click', () => selecionarBebida(indice));
+    listaBebidasEl.appendChild(botao);
   });
 }
 
@@ -88,24 +148,19 @@ function carregarBebidas() {
   xhr.open('GET', urlBebidas, true);
   
   xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4 && xhr.status === 200) {
-      const resposta = JSON.parse(xhr.responseText);
-      bebidas = resposta.record.bebidas;
-      listaBebidasEl.innerHTML = '';
-      
-      bebidas.forEach((bebida, indice) => {
-        const botao = document.createElement('button');
-        botao.type = 'button';
-        botao.className = 'bebida';
-        botao.dataset.indice = indice;
-        botao.innerHTML = '<img src="' + bebida.imagem + '" alt="' + bebida.sabor + '">' +
-                          '<div>' +
-                            '<div>' + bebida.sabor + '</div>' +
-                            '<div class="preco">' + formatar(bebida.preco) + '</div>' +
-                          '</div>';
-        botao.addEventListener('click', () => selecionarBebida(indice));
-        listaBebidasEl.appendChild(botao);
-      });
+    if (xhr.readyState === 4) {
+      if (xhr.status === 200) {
+        try {
+          const resposta = JSON.parse(xhr.responseText);
+          bebidas = resposta.record && resposta.record.bebidas ? resposta.record.bebidas : [];
+          criarBotoesBebidas();
+          mostrarMensagem('Clique em um bebida e depois arraste moedas para o slot.');
+        } catch (e) {
+          mostrarMensagem('Erro ao ler dados de bebidas.');
+        }
+      } else {
+        mostrarMensagem('Erro ao acessar o serviço de bebidas.');
+      }
     }
   };
   xhr.send();
@@ -115,4 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
   carregarBebidas();
   configurarMoedas();
   atualizarVisor();
+  saidaEl.addEventListener('click', () => {
+    saidaEl.innerHTML = '<span>Nenhuma bebida liberada.</span>';
+  });
 });
