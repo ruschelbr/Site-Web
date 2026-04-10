@@ -4,18 +4,18 @@
   padding: 0; 
 }
 
-body {
-  font-family: Arial, sans-serif;
-  background: #f0f0f0;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+body { 
+  font-family: Arial, sans-serif; 
+  background: #f0f0f0; 
+  min-height: 100vh; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
 }
 
 .maquina { 
   background: #e53935; 
-  width: 460px; 
+  width: 500px; 
   padding: 12px; 
   border-radius: 10px; 
 }
@@ -61,4 +61,39 @@ body {
 
 .preco { 
   color: #ffeb3b; 
+}
+
+.moedas-lista { 
+  display: flex; 
+  justify-content: space-between; 
+  margin-top: 8px; 
+}
+
+.moeda { 
+  width: 42px; 
+  height: 42px; 
+  border-radius: 50%; 
+  background: #ffd54f; 
+  color: #000; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  font-size: 11px; 
+  text-align: center; 
+  cursor: grab; 
+}
+
+.slot { 
+  background: #333; 
+  margin-top: 8px; 
+  height: 60px; 
+  border-radius: 4px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  text-align: center; 
+}
+
+.slot.ativo { 
+  border: 2px dashed #ffeb3b; 
 }
