@@ -3,24 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Máquina de Bebidas - Parte 2</title>
+  <title>Máquina de Bebidas - Arthur Amorim Ruschel (17024102)</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main>
+  <main class="maquina">
     <header class="caixa">
       <h1>MÁQUINA POP</h1>
       <p>Escolha sua bebida</p>
     </header>
-
+    
     <div class="painel">
       <section class="caixa">
         <h2>Bebidas disponíveis</h2>
-        <div id="listaBebidas">
-          <p>As bebidas aparecerão aqui.</p>
-        </div>
+        <div class="lista-bebidas" id="listaBebidas"></div>
       </section>
-
+      
       <aside class="caixa">
         <h2>Créditos</h2>
         <div id="visorValor">R$ 0,00</div>
@@ -30,9 +28,11 @@
         <div id="slotMoedas">Solte as moedas aqui</div>
       </aside>
     </div>
-
-    <section class="caixa" id="mensagem">Insira moedas e escolha uma bebida.</section>
-    <section class="caixa" id="saida">Nenhuma bebida liberada.</section>
+    
+    <section class="caixa" id="mensagem" style="margin-top:8px;">Carregando bebidas...</section>
+    <section class="caixa" id="saida" style="margin-top:8px;">Nenhuma bebida liberada.</section>
   </main>
+
+  <script src="script.js"></script>
 </body>
 </html>

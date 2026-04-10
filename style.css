@@ -1,33 +1,64 @@
 * { 
-    box-sizing: border-box; 
-    margin: 0; 
-    padding: 0; 
+  box-sizing: border-box; 
+  margin: 0; 
+  padding: 0; 
 }
+
 body {
-    font-family: Arial, sans-serif;
-    background: #f0f0f0;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  font-family: Arial, sans-serif;
+  background: #f0f0f0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-main {
-    background: #e53935;
-    width: 420px;
-    padding: 12px;
-    border-radius: 10px;
+
+.maquina { 
+  background: #e53935; 
+  width: 460px; 
+  padding: 12px; 
+  border-radius: 10px; 
 }
-header, section, aside {
-    margin-bottom: 10px;
-    }
-.painel {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 8px;
+
+.painel { 
+  display: grid; 
+  grid-template-columns: 2fr 1fr; 
+  gap: 8px; 
+  margin-top: 8px; 
 }
-.caixa {
-    background: #111;
-    color: #fff;
-    border-radius: 6px;
-    padding: 8px;
+
+.caixa { 
+  background: #111; 
+  color: #fff; 
+  border-radius: 6px; 
+  padding: 8px; 
+  font-size: 13px; 
+}
+
+.lista-bebidas { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 6px; 
+}
+
+.bebida { 
+  display: flex; 
+  align-items: center; 
+  gap: 8px; 
+  background: #222; 
+  padding: 6px; 
+  border-radius: 4px; 
+  border: 1px solid #000; 
+}
+
+.bebida img { 
+  width: 32px; 
+  height: 32px; 
+  object-fit: contain; 
+  background: #fff; 
+  border-radius: 4px; 
+}
+
+.preco { 
+  color: #ffeb3b; 
 }
