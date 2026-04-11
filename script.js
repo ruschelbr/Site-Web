@@ -144,26 +144,21 @@ function criarBotoesBebidas() {
 }
 
 function carregarBebidas() {
-  const xhr = new XMLHttpRequest();
-  xhr.open('GET', urlBebidas, true);
-  
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4) {
-      if (xhr.status === 200) {
-        try {
-          const resposta = JSON.parse(xhr.responseText);
-          bebidas = resposta.record && resposta.record.bebidas ? resposta.record.bebidas : [];
-          criarBotoesBebidas();
-          mostrarMensagem('Clique em um bebida e depois arraste moedas para o slot.');
-        } catch (e) {
-          mostrarMensagem('Erro ao ler dados de bebidas.');
-        }
-      } else {
-        mostrarMensagem('Erro ao acessar o serviço de bebidas.');
+  fetch(urlBebidas)
+    .then(res => res.json())
+    .then(dados => {
+      try {
+        bebidas = dados.record && dados.record.bebidas ? dados.record.bebidas : [];
+        criarBotoesBebidas();
+        mostrarMensagem('Clique em um bebida e depois arraste moedas para o slot.');
+      } catch (e) {
+        mostrarMensagem('Erro ao ler dados de bebidas.');
       }
-    }
-  };
-  xhr.send();
+    })
+    .catch(err => {
+      console.log(err);
+      mostrarMensagem('Erro ao acessar o serviço de bebidas.');
+    });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
