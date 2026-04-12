@@ -57,7 +57,7 @@ function liberarRefrigerante(troco) {
   
   valorInserido = 0;
   atualizarVisor();
-  infoRefriEl.textContent = 'Nenhum bebida selecionada';
+  infoRefriEl.textContent = 'Nenhuma bebida selecionada';
   limparSelecao();
   bebidaSelecionada = null;
 }
@@ -68,7 +68,7 @@ function verificarCompra() {
     const falta = bebidaSelecionada.preco - valorInserido;
     mostrarMensagem('Faltam ' + formatar(falta) + ' para comprar ' + bebidaSelecionada.sabor + '.');
   } else {
-    const troco = Number((valorInserido - bebidaSelecionada.preco).toFixed(2));
+    const troco = valorInserido - bebidaSelecionada.preco;
     liberarRefrigerante(troco);
   }
 }
@@ -147,13 +147,15 @@ function carregarBebidas() {
   fetch(urlBebidas)
     .then(res => res.json())
     .then(dados => {
-      try {
-        bebidas = dados.record && dados.record.bebidas ? dados.record.bebidas : [];
-        criarBotoesBebidas();
-        mostrarMensagem('Clique em um bebida e depois arraste moedas para o slot.');
-      } catch (e) {
-        mostrarMensagem('Erro ao ler dados de bebidas.');
+      if (dados.record && dados.record.bebidas) {
+        bebidas = dados.record.bebidas;
+      } else {
+        bebidas = [];
       }
+
+      criarBotoesBebidas();
+      console.log('bebidas carregadas', bebidas);
+      mostrarMensagem('Escolha uma bebida e arraste as moedas.');
     })
     .catch(err => {
       console.log(err);
